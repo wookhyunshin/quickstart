@@ -39,20 +39,21 @@ TC_RECEIVE_PORT    = args['tc_port']
 def send_tm(simulator):
     tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    with io.open(TEST_DATA, 'rb') as f:
-        simulator.tm_counter = 1
-        header = bytearray(6)
-        while f.readinto(header) == 6:
-            (len,) = unpack_from('>H', header, 4)
+    while True:
+        with io.open(TEST_DATA, 'rb') as f:
+            simulator.tm_counter = 1
+            header = bytearray(6)
+            while f.readinto(header) == 6:
+                (len,) = unpack_from('>H', header, 4)
 
-            packet = bytearray(len + 7)
-            f.seek(-6, io.SEEK_CUR)
-            f.readinto(packet)
+                packet = bytearray(len + 7)
+                f.seek(-6, io.SEEK_CUR)
+                f.readinto(packet)
 
-            tm_socket.sendto(packet, (TM_SEND_ADDRESS, TM_SEND_PORT))
-            simulator.tm_counter += 1
+                tm_socket.sendto(packet, (TM_SEND_ADDRESS, TM_SEND_PORT))
+                simulator.tm_counter += 1
 
-            sleep(1 / simulator.rate)
+                sleep(1 / simulator.rate)
 
 
 def receive_tc(simulator):
