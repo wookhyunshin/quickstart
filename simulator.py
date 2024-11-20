@@ -36,12 +36,14 @@ RATE            = args['rate']
 TC_RECEIVE_ADDRESS = args['tc_host']
 TC_RECEIVE_PORT    = args['tc_port']
 
+import math
+import struct
 def send_tm(simulator):
     tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
+    simulator.tm_counter = 1
     while True:
         with io.open(TEST_DATA, 'rb') as f:
-            simulator.tm_counter = 1
             header = bytearray(6)
             while f.readinto(header) == 6:
                 (len,) = unpack_from('>H', header, 4)
@@ -50,6 +52,15 @@ def send_tm(simulator):
                 f.seek(-6, io.SEEK_CUR)
                 f.readinto(packet)
 
+                imu_x_value = math.sin(math.radians(simulator.tm_counter / 360.0))
+                imu_y_value = math.cos(math.radians(simulator.tm_counter / 360.0))
+                imu_z_value = math.tan(math.radians(simulator.tm_counter / 360.0))
+
+                packet = packet[:16] + struct.pack('>fff', imu_x_value, imu_y_value, imu_z_value)
+                tm_socket.sendto(packet, (TM_SEND_ADDRESS, TM_SEND_PORT))
+
+                # 데이터를 하나 더 만든다
+                packet[1] = 98
                 tm_socket.sendto(packet, (TM_SEND_ADDRESS, TM_SEND_PORT))
                 simulator.tm_counter += 1
 
