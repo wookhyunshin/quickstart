@@ -41,13 +41,14 @@ dataLinks:
   - name: sband-simulator
     class: org.yamcs.mqtt.MqttPacketLink
     brokers:
-      - tcp://192.168.0.75:1883
+      - tcp://localhost:1883
+        #- tcp://192.168.0.75:1883
     tmTopic: sband/tm
     #tcTopic: yamcs-tc
     stream: tm_realtime_mqtt    
     # other MQTT options
     # other link options
-    tmConverterClassName: com.example.myproject.HAMAMqttToTmPacketConverter
+    tmConverterClassName: org.yamcs.mqtt.DefaultMqttToTmPacketConverter
     packetPreprocessorClassName: com.example.myproject.MyPacketPreprocessor
     #commandPostprocessorClassName: com.example.myproject.HAMAPacketPreprocessor"
 
