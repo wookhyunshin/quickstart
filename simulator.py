@@ -62,6 +62,9 @@ def send_tm(simulator):
                 # 데이터를 하나 더 만든다
                 packet[1] = 98
                 tm_socket.sendto(packet, (TM_SEND_ADDRESS, TM_SEND_PORT))
+
+                with open('dump.bin', 'wb') as dumpf:
+                    dumpf.write(packet)
                 simulator.tm_counter += 1
 
                 sleep(1 / simulator.rate)

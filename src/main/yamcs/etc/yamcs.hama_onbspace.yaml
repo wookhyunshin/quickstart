@@ -38,6 +38,19 @@ dataLinks:
     port: 10025
     commandPostprocessorClassName: com.example.myproject.MyCommandPostprocessor
 
+  - name: sband-simulator
+    class: org.yamcs.mqtt.MqttPacketLink
+    brokers:
+      - tcp://192.168.0.75:1883
+    tmTopic: sband/tm
+    #tcTopic: yamcs-tc
+    stream: tm_realtime_mqtt    
+    # other MQTT options
+    # other link options
+    tmConverterClassName: com.example.myproject.HAMAMqttToTmPacketConverter
+    packetPreprocessorClassName: com.example.myproject.MyPacketPreprocessor
+    #commandPostprocessorClassName: com.example.myproject.HAMAPacketPreprocessor"
+
 mdb:
   # Configuration of the active loaders
   # Valid loaders are: sheet, xtce or fully qualified name of the class
@@ -54,6 +67,8 @@ streamConfig:
     - name: "tm_realtime"
       processor: "realtime"
     - name: "tm_dump"
+    - name: "tm_realtime_mqtt"
+      processor: "realtime"
   cmdHist: ["cmdhist_realtime", "cmdhist_dump"]
   event: ["events_realtime", "events_dump"]
   param: ["pp_realtime", "pp_dump", "sys_param", "proc_param"]

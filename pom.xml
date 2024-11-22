@@ -32,6 +32,11 @@
       <artifactId>yamcs-web</artifactId>
       <version>${yamcsVersion}</version>
     </dependency>
+    <dependency>
+      <groupId>org.yamcs</groupId>
+      <artifactId>yamcs-mqtt</artifactId>
+      <version>0.2.2</version>
+    </dependency>    
   </dependencies>
 
   <build>
